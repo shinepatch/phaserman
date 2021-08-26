@@ -150,24 +150,102 @@ function update(){
 
 }
 
-function collectStar(){
+function collectStar(player, star){
+	score += 1;
+	scoreLabel.setText(score);
+	star.kill();
+	star.reset(Math.floor(Math.random()* 750), 0);
 
+	if(score %10 ==0){
+		newHp = hp.create(Math.floor(Math.random() * 750), 0, "health");
+		newHp.body.gravity.y = 200;
+		newHp.body.bounce.y = 0.2;
+	}
 }
 function collectDiamond(){
-
+	score += 10;
+  	scoreLabel.setText(score);
+  	diamond.kill();
+	diamond.reset(Math.random()*750,0);
 }
-function collectHealth(){
+function collectHealth(player, hp){
+	lives += 1;
 
+	livesLabel.setText(lives);
+
+	hp.kill();
 }
-function loseLife(){
+function loseLife(player, enemy){
+	lives -= 1;
 
+	livesLabel.setText(lives);
+
+	enemy.kill();
+
+	enemy.reset(10, 20);
 }
 function endGame(){
+  player.kill();
 
+  scoreLabel.visible = false;
+  livesLabel.visible = false;
+
+  goLabel.text = "GAME OVER! \n You scored " + score + "\n Press Enter to try again...";
+  goLabel.visible = true;
+  enterKey.onDown.addOnce(restartGame);
 }
-function restartGame(){
 
+function restartGame(){
+	stars.callAll("kill");
+	diamonds.callAll("kill");
+	hp.callAll("kill");
+
+	for (var count = 0; count < 12; count = count + 1){
+		
+	var star = stars.create(count * 70, 0, "star");
+	star.body.gravity.y = 200;
+	star.body.gravity.x = 0.5 + Math.random() * 0.3;
+	star.body.bounce.y = 0.7 + Math.random() * 0.3;
+
+	}
+	var diamond = diamonds.create(Math.floor(Math.random()*750), 0, 'diamond');
+	diamond.body.gravity.y = 200;
+	diamond.body.bounce.y = 0.7 + Math.random() * 0.2;
+
+	score = 0;
+	lives = 3;
+	player.reset(32, 400);
+
+	livesLabel.setText(lives);
+	scoreLabel.setText(score);
+
+	goLabel.visible = false;
+	scoreLabel.visible = true;
+	livesLabel.visible = true;
 }
 function moveEnemy(){
-	
+	if(enemy1.x > 759){
+		enemy1.body.velocity.x = -120;
+		enemy1.animations.play("left");
+	}
+	else if (enemy1.x < 405){
+		enemy1.body.velocity.x = 120;
+		enemy1.animations.play("right");
+	}
+		if(enemy2.x > 200){
+		enemy1.body.velocity.x = -120;
+		enemy1.animations.play("left");
+	}
+	else if (enemy2.x < 21){
+		enemy1.body.velocity.x = 120;
+		enemy1.animations.play("right");
+	}
+		if(enemy3.x > 759){
+		enemy1.body.velocity.x = -120;
+		enemy1.animations.play("left");
+	}
+	else if (enemy3.x < 201){
+		enemy1.body.velocity.x = 120;
+		enemy1.animations.play("right");
+	}
 }
